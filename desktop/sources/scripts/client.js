@@ -17,6 +17,7 @@ function Client () {
   this.acels = new Acels(this)
   this.theme = new Theme(this)
   this.source = new Source(this)
+  this.image = new Source(this)
 
   this.commander = new Commander(this)
   this.surface = new Surface(this)
@@ -39,8 +40,12 @@ function Client () {
     window.addEventListener('drop', this.onDrop)
 
     this.acels.set('File', 'New', 'CmdOrCtrl+N', () => { this.source.new(); this.surface.clear(); this.commander.clear() })
-    this.acels.set('File', 'Save', 'CmdOrCtrl+S', () => { this.source.download('ronin', 'lisp', this.commander._input.value, 'text/plain') })
-    this.acels.set('File', 'Export Image', 'CmdOrCtrl+E', () => { this.source.download('ronin', 'png', this.surface.el.toDataURL('image/png', 1.0), 'image/png') })
+    this.acels.set('File', 'Save', 'CmdOrCtrl+S', () => { this.source.write('ronin.lisp', this.commander._input.value) })
+    this.acels.set('File', 'Export Image', 'CmdOrCtrl+E', () => {
+      this.surface.el.toBlob( (blob) => {
+        blob.arrayBuffer().then(buffer => this.image.write('ronin.png', Buffer.from(buffer))) 
+      }, 'image/png', 1.0)
+    })
     this.acels.set('File', 'Open', 'CmdOrCtrl+O', () => { this.source.open('lisp', this.whenOpen) })
 
     this.acels.add('Edit', 'undo')
@@ -55,7 +60,6 @@ function Client () {
     this.acels.set('View', 'Expand Commander', 'CmdOrCtrl+Shift+K', () => { this.commander.toggle(true) })
 
     this.acels.set('Project', 'Run', 'CmdOrCtrl+R', () => { this.commander.run() })
-    this.acels.set('Project', 'Reload Run', 'CmdOrCtrl+Shift+R', () => { this.source.revert(); this.commander.run() })
     this.acels.set('Project', 'Re-Indent', 'CmdOrCtrl+Shift+I', () => { this.commander.reindent() })
     this.acels.set('Project', 'Clean', 'Escape', () => { this.commander.cleanup() })
 
@@ -68,6 +72,7 @@ function Client () {
     console.info(`${this.acels}`)
     this.theme.start()
     this.source.start()
+    this.image.start()
     this.commander.start()
     this.surface.start()
     this.loop()

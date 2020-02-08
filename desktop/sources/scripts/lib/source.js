@@ -6,6 +6,8 @@
 function Source (client) {
   this.cache = {}
 
+  this.path = null
+
   this.install = () => {
   }
 
@@ -69,33 +71,22 @@ function Source (client) {
     reader.readAsText(file, 'UTF-8')
   }
 
-  this.write = (name, ext, content, type, settings = 'charset=utf-8') => {
-    const link = document.createElement('a')
-    link.setAttribute('download', `${name}-${timestamp()}.${ext}`)
-    if (type === 'image/png' || type === 'image/jpeg') {
-      link.setAttribute('href', content)
-    } else {
-      link.setAttribute('href', 'data:' + type + ';' + settings + ',' + encodeURIComponent(content))
+  this.write = (name, content) => {
+    if (!this.path)
+    {
+      const dialog = require('electron').remote.dialog;
+      this.path = dialog.showSaveDialogSync({
+        defaultPath: name,
+        properties : ['openFile'],
+      });
     }
-    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }))
-  }
 
-  function timestamp (d = new Date(), e = new Date(d)) {
-    return `${arvelie()}-${neralie()}`
-  }
-
-  function arvelie (date = new Date()) {
-    const start = new Date(date.getFullYear(), 0, 0)
-    const diff = (date - start) + ((start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000)
-    const doty = Math.floor(diff / 86400000) - 1
-    const y = date.getFullYear().toString().substr(2, 2)
-    const m = doty === 364 || doty === 365 ? '+' : String.fromCharCode(97 + Math.floor(doty / 14)).toUpperCase()
-    const d = `${(doty === 365 ? 1 : doty === 366 ? 2 : (doty % 14)) + 1}`.padStart(2, '0')
-    return `${y}${m}${d}`
-  }
-
-  function neralie (d = new Date(), e = new Date(d)) {
-    const ms = e - d.setHours(0, 0, 0, 0)
-    return (ms / 8640 / 10000).toFixed(6).substr(2, 6)
+    const fs = require('fs');
+    try { fs.writeFileSync(this.path, content); }
+    catch(e) 
+    { 
+      alert('Failed to save the file !');
+      this.path = null; 
+    }
   }
 }
