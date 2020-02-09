@@ -1,3 +1,4 @@
+::-webkit-scrollbar-thumb {background: var(--b_inv); }
 body { background:var(--background);  }
 #ronin #wrapper { background: var(--background); }
 #ronin #wrapper #commander { background:var(--background); }

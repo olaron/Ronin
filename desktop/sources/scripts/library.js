@@ -406,6 +406,10 @@ function Library (client) {
 
   // Arrays
 
+  this.flatten = (...args) => {
+    return args.flat()
+  }
+
   this.each = async (arr, fn) => { // Run a function for each element in a list.
     for (let i = 0; i < arr.length; i++) {
       const arg = arr[i]

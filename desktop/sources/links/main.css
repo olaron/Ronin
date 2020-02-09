@@ -25,7 +25,9 @@ body { margin:0px; padding:0px; overflow:hidden; font-family:"input_mono_regular
 #ronin #surface { border-radius: 2px }
 
 @media (min-width: 720px) {
-  #ronin #wrapper #commander { width:350px; }
-  #ronin.hidden #wrapper #commander { margin-left:-380px; }
-  #ronin #surface,#ronin #guide { left:380px; }
+  #ronin #wrapper #commander { width:550px; }
+  #ronin.hidden #wrapper #commander { margin-left:-580px; }
+  #ronin #surface,#ronin #guide { left:580px; }
 }
+
+::-webkit-scrollbar {width: 5px;}
