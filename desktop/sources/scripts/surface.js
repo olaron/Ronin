@@ -4,11 +4,14 @@
 /* global Image */
 
 function Surface (client) {
+  
   this.el = document.createElement('canvas')
   this.el.id = 'surface'
   this._guide = document.createElement('canvas')
   this._guide.id = 'guide'
   this._guide.setAttribute('tabindex', '1') // focus is necessary to capture keyboard events
+  this.surfaces = document.createElement('div')
+  this.surfaces.id = 'surfaces'
   this.ratio = window.devicePixelRatio
 
   // Contexts
@@ -16,8 +19,9 @@ function Surface (client) {
   this.guide = this._guide.getContext('2d')
 
   this.install = function (host) {
-    host.appendChild(this.el)
-    host.appendChild(this._guide)
+    this.surfaces.appendChild(this.el)
+    this.surfaces.appendChild(this._guide)
+    host.appendChild(this.surfaces)
     window.addEventListener('resize', (e) => { this.onResize() }, false)
     this._guide.addEventListener('mousedown', client.onMouseDown, false)
     this._guide.addEventListener('mousemove', client.onMouseMove, false)

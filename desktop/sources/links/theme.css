@@ -1,4 +1,6 @@
 ::-webkit-scrollbar-thumb {background: var(--b_inv); }
+::-webkit-scrollbar-thumb:hover {background: var(--f_high); }
+::-webkit-scrollbar-corner {background: var(--b_inv);}
 body { background:var(--background);  }
 #ronin #wrapper { background: var(--background); }
 #ronin #wrapper #commander { background:var(--background); }
