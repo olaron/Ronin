@@ -19,6 +19,15 @@ function Library (client) {
     link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }))
   }
 
+  this.savefile = (path) => {
+    client.surface.el.toBlob( (blob) => {
+      blob.arrayBuffer().then(buffer => {
+        const fs = require('fs');
+        fs.writeFileSync(path, Buffer.from(buffer));
+      }) 
+    }, 'image/png', 1.0)
+  }
+
   // Shapes
 
   this.pos = (x = 0, y = 0) => { // Returns a position shape.
@@ -203,13 +212,13 @@ function Library (client) {
 
   // Actions
 
-  this.stroke = (shape, color, thickness = 2) => { // Strokes a shape.
-    client.surface.stroke(shape, color, thickness)
+  this.stroke = (shape, color, thickness = 2, operation = 'source-over') => { // Strokes a shape.
+    client.surface.stroke(shape, color, thickness, operation) 
     return shape
   }
 
-  this.fill = (rect = this['get-frame'](), color) => { // Fills a shape.
-    client.surface.fill(rect, color)
+  this.fill = (rect = this['get-frame'](), color, operation = 'source-over') => { // Fills a shape.
+    client.surface.fill(rect, color, operation)
     return rect
   }
 

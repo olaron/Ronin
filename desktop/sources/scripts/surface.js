@@ -43,7 +43,8 @@ function Surface (client) {
 
   // Shape
 
-  this.stroke = (shape, color = client.theme.get('f_high'), width = 2, context = this.context) => {
+  this.stroke = (shape, color = client.theme.get('f_high'), width = 2, operation = 'source-over', context = this.context) => {
+    context.globalCompositeOperation = operation
     context.beginPath()
     this.trace(shape, context)
     context.lineWidth = width
@@ -62,11 +63,13 @@ function Surface (client) {
       context.stroke()
     }
     context.closePath()
+    context.globalCompositeOperation = 'source-over'
   }
 
   // Fill
 
-  this.fill = (shape, color = client.theme.get('b_high'), context = this.context) => {
+  this.fill = (shape, color = client.theme.get('b_high'), operation = 'source-over', context = this.context) => {
+    context.globalCompositeOperation = operation
     context.beginPath()
     context.fillStyle = typeof color === 'object' && color.rgba ? color.rgba : color
     this.trace(shape, context)
@@ -83,6 +86,7 @@ function Surface (client) {
       context.fill()
     }
     context.closePath()
+    context.globalCompositeOperation = 'source-over'
   }
 
   // Clear
@@ -204,17 +208,17 @@ function Surface (client) {
 
   this.drawGuide = function (shape, color = 'white', context = this.guide) {
     if (!shape) { return }
-    this.stroke(shape.rect || shape, 'black', 4, context)
-    if (shape.pos) { this.stroke(shape.pos, 'black', 4, context) }
-    if (shape.line) { this.stroke(shape.line, 'black', 4, context) }
+    this.stroke(shape.rect || shape, 'black', 4, 'source-over', context)
+    if (shape.pos) { this.stroke(shape.pos, 'black', 4, 'source-over', context) }
+    if (shape.line) { this.stroke(shape.line, 'black', 4, 'source-over', context) }
     if (shape.circle) {
-      this.stroke(shape.circle, 'black', 4, context)
+      this.stroke(shape.circle, 'black', 4, 'source-over', context)
     }
-    this.stroke(shape.rect || shape, color, 1.5, context)
-    if (shape.pos) { this.stroke(shape.pos, color, 1.5, context) }
-    if (shape.line) { this.stroke(shape.line, color, 1.5, context) }
+    this.stroke(shape.rect || shape, color, 1.5, 'source-over', context)
+    if (shape.pos) { this.stroke(shape.pos, color, 1.5, 'source-over', context) }
+    if (shape.line) { this.stroke(shape.line, color, 1.5, 'source-over', context) }
     if (shape.circle) {
-      this.stroke(shape.circle, color, 1.5, context)
+      this.stroke(shape.circle, color, 1.5, 'source-over', context)
     }
   }
 
